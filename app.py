@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, request, jsonify
 from tensorflow.keras.models import load_model
 import numpy as np
@@ -19,6 +20,8 @@ def preprocess_image(data_url):
 
     # Convert to grayscale image
     img = cv2.imdecode(np_data, cv2.IMREAD_GRAYSCALE)
+    if img is None:
+        raise ValueError("Image decoding failed. Check the base64 input.")
 
     # Invert image to make digits white on black
     _, thresh = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY_INV)
@@ -46,18 +49,24 @@ def index():
 
 @app.route('/about')
 def about():
-    return render_template('about.html')  # ✅ fixed here
+    return render_template('about.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
         data = request.get_json()
-        image_data = data['image']
+        image_data = data.get('image')
+
+        if not image_data:
+            return jsonify({'error': 'No image data received'})
+
         processed_img = preprocess_image(image_data)
         predictions = model.predict(processed_img)
         predicted_digit = int(np.argmax(predictions))
+
         return jsonify({'prediction': predicted_digit})
     except Exception as e:
+        print("❌ Prediction error:", str(e))
         return jsonify({'error': str(e)})
 
 if __name__ == '__main__':
