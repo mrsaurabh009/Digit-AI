@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About | Digit AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+  <!-- 🔹 Navbar -->
+  <header>
+    <nav class="navbar">
+      <div class="nav-brand">Digit AI</div>
+      <ul class="nav-links" id="navLinks">
+      <li><a href="{{ url_for('index') }}">Home</a></li>
+      <li><a href="{{ url_for('about') }}">About</a></li>
+        <li><a href="/#contact">Contact</a></li>
+      </ul>
+      <div class="hamburger" id="hamburger">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+    </nav>
+  </header>
+
+  <section class="about-container">
+  <h2>About Digit AI</h2>
+  <ul class="about-list">
+    <li>
+      <strong>Digit AI</strong> is a powerful and responsive handwritten digit recognition system built using deep learning.
+    </li>
+    <li>
+      The model is trained on the <strong>MNIST dataset</strong> using <strong>convolutional neural networks (CNNs)</strong> and achieves over <strong>93% accuracy</strong>.
+    </li>
+    <li>
+      Users can draw digits directly in the browser using a responsive canvas.
+    </li>
+    <li>
+      The backend is built with <strong>Flask and TensorFlow</strong> to deliver instant predictions.
+    </li>
+    <li>
+      The web application is built using <strong>HTML5, CSS3, and JavaScript</strong> and designed for responsiveness and modern aesthetics.
+    </li>
+    <li>
+      Ideal for <strong>educational use</strong>, <strong>machine learning portfolios</strong>, and <strong>real-world digit classification tasks</strong>.
+    </li>
+  </ul>
+</section>
+
+
+  <!-- 🔹 Footer -->
+  <footer>
+    Made with ❤️ by <strong>Saurabh</strong> |
+    <a href="https://github.com/" target="_blank">GitHub</a> |
+    <a href="https://linkedin.com/" target="_blank">LinkedIn</a>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      hamburger.classList.toggle('toggle');
+    });
+  </script>
+
+</body>
+</html>

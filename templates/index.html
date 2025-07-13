@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digit Recognizer</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="nav-brand">Digit AI</div>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="{{ url_for('index') }}">Home</a></li>
+          <li><a href="{{ url_for('about') }}">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="hamburger" id="hamburger">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container">
+      <h1 class="title">Handwritten Digit Recognizer</h1>
+
+      <div class="canvas-container">
+        <canvas id="canvas"></canvas>
+      </div>
+
+      <div class="buttons">
+        <button onclick="clearCanvas()">🧹 Clear</button>
+        <button onclick="predict()">🚀 Predict</button>
+      </div>
+
+      <div class="result-box">
+        <h2 id="result">Draw a digit and click Predict</h2>
+      </div>
+    </div>
+
+    <section class="feature-cards-below">
+      <div class="feature-card fadeInUp">
+        <img src="/static/digit1.png" alt="Feature 1" />
+        <h3>AI-Powered Predictions</h3>
+        <p>
+          Built using deep neural networks with over 93% accuracy on handwritten
+          digits.
+        </p>
+      </div>
+
+      <div class="feature-card fadeInUp">
+        <img src="/static/digit2.png" alt="Feature 2" />
+        <h3>Live Drawing Canvas</h3>
+        <p>
+          Draw digits directly in the browser with instant prediction results.
+        </p>
+      </div>
+    </section>
+
+    <footer id="contact">
+      Made with ❤️ by <strong>Saurabh</strong> |
+      <a href="https://github.com/" target="_blank">GitHub</a> |
+      <a href="https://www.linkedin.com/" target="_blank">LinkedIn</a> |
+      <a href="https://www.linkedin.com/" target="_blank">My Portfolio</a>
+    </footer>
+
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      let drawing = false;
+
+      // Responsive canvas setup
+      canvas.width = 280;
+      canvas.height = 280;
+
+      function startPosition(e) {
+        drawing = true;
+        draw(e);
+      }
+
+      function endPosition() {
+        drawing = false;
+        ctx.beginPath();
+      }
+
+      function draw(e) {
+        if (!drawing) return;
+        ctx.lineWidth = 20;
+        ctx.lineCap = "round";
+        ctx.strokeStyle = "#000000";
+        const rect = canvas.getBoundingClientRect();
+        ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+      }
+
+      function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        document.getElementById("result").innerText =
+          "Draw a digit and click Predict";
+      }
+
+      function predict() {
+        const image = canvas.toDataURL("image/png");
+        fetch("/predict", {
+          method: "POST",
+          body: JSON.stringify({ image }),
+          headers: { "Content-Type": "application/json" },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            document.getElementById(
+              "result"
+            ).innerText = `Predicted Digit: ${data.prediction}`;
+          });
+      }
+
+      canvas.addEventListener("mousedown", startPosition);
+      canvas.addEventListener("mouseup", endPosition);
+      canvas.addEventListener("mousemove", draw);
+      clearCanvas();
+
+      const hamburger = document.getElementById("hamburger");
+      const navLinks = document.getElementById("navLinks");
+
+      hamburger.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+        hamburger.classList.toggle("toggle");
+      });
+    </script>
+  </body>
+</html>
