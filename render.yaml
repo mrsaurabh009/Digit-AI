@@ -2,7 +2,6 @@ services:
   - type: web
     name: digit-ai
     env: python
-    buildCommand: ""
-    startCommand: gunicorn app:app
-    runtime: python
     region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
