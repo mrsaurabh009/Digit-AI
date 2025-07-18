@@ -10,7 +10,7 @@ import os
 app = Flask(__name__)
 
 # Load the trained model
-MODEL_PATH = 'digit_model_fixed.h5'
+MODEL_PATH = 'digit_model.h5'
 
 try:
     model = load_model(MODEL_PATH)
